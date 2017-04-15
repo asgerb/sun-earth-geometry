@@ -81,7 +81,7 @@ legend.onAdd = function(){
     var div = L.DomUtil.create('div', 'legend');
     div.innerHTML +="<p>location = " + loc[0] + ", " + loc[1] + "</p>";
     div.innerHTML +="<p>day = " + day + "</p>";
-    div.innerHTML +="<p>solar time = " + solar_time + "</p>";
+    div.innerHTML +="<p>solar time = " + solar_time + " min " + "(" + solar_time/60 + " hours)</p>";
     div.innerHTML +="<p>declination = " + declination + "</p>";
     div.innerHTML +="<p>hour angle = " + hr_angle + "</p>";
     div.innerHTML +="<p>solar angle = " + solar_angle + "</p>";
