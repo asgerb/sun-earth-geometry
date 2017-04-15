@@ -1,6 +1,6 @@
 // user inputs
-var lat = 45, 
-    lon = -124,
+var lat = 44.568212, 
+    lon = -123.280313,
     day = 105, //days since January 1st
     solar_time = -60, // minutes from solar noon (60 min = 15 deg),
     loc = [lat, lon];
