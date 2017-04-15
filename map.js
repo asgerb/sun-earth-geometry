@@ -23,7 +23,7 @@ var sunriseAzimuth = [45.25,-123],
 var sunriseLine = L.polyline([loc, sunriseAzimuth], {
   color: "#000",
   weight: 5,
-  dashArray: "5,5",  
+  dashArray: "4,3",  
 }).addTo(map);
 
 
