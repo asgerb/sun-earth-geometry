@@ -131,7 +131,7 @@ noUiSlider.create(timeSlider, {
   }
 });
 
-//update azimuth and legend with slider
+//update azimuthLine and legend based on timeSlider 
 timeSlider.noUiSlider.on('update', function(values, handle) {
   solar_time = values[handle];
   
@@ -148,11 +148,14 @@ timeSlider.noUiSlider.on('update', function(values, handle) {
   
   azimuthLine.setLatLngs([loc, [lat + Math.sin(toRad(90 - sol_az)), lon + (Math.cos(toRad(90 - sol_az)))]]);
   
+  //labeling and coloring of azimuthLine
   if (sol_ang < 0) {
     azimuthLine.setStyle({color: '#2b197f'});
+    azimuthLine.bindTooltip("<p>Night</p><p>Azmimuth: " + sol_az + "</p>").openTooltip();
   } 
   else {
     azimuthLine.setStyle({color: '#ff5733'});
+    azimuthLine.bindTooltip("<p>Day</p><p>Azmimuth: " + sol_az + "</p>").openTooltip();
   }
 });
 
