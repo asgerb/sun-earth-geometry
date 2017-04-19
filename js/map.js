@@ -1,7 +1,9 @@
+//Note: This code is really messy and needs to be cleaned up!
+
 // user inputs & sun-earth geom variables
 var lat = 44.568212, 
     lon = -123.280313,
-    day = 105, //days since January 1st
+    day = 107, //days since January 1st
     solar_time = 0, // minutes from solar noon (60 min = 15 deg),
     loc = [lat, lon];
 var dec, hr_ang, sol_ang, sol_az;
@@ -101,11 +103,17 @@ inputControl.getContainer().addEventListener('mouseout', function () {
     map.dragging.enable();
 });
 
+// change leaflet icon
+var locIcon = L.icon({
+  iconUrl: 'assets/pin-32.png',
+  iconSize: [32,32],
+  iconAnchor: [16,25]
+});
 
 //define and add layers to map
-var locMarker = L.circleMarker(loc, {
-  weight: 4,
-  color: "#000"
+var locMarker = L.marker(loc, {
+  icon: locIcon,
+  draggable: true
 }).addTo(map);
 
 var azimuthLine = L.polyline([loc, [lat + Math.sin(toRad(90 - sol_az)), lon + (Math.cos(toRad(90 - sol_az)))]], {
@@ -131,12 +139,8 @@ noUiSlider.create(timeSlider, {
   }
 });
 
-//update azimuthLine and legend based on timeSlider 
-timeSlider.noUiSlider.on('update', function(values, handle) {
-  solar_time = values[handle];
-  
+function updateAzimuth(isDrag) {
   calcGeom();
-  
   var legend = document.getElementsByClassName('legend')[0];
   legend.innerHTML = "<p>location = " + loc[0] + ", " + loc[1] + "</p> \
                       <p>day = " + day + "</p> \
@@ -149,20 +153,32 @@ timeSlider.noUiSlider.on('update', function(values, handle) {
   azimuthLine.setLatLngs([loc, [lat + Math.sin(toRad(90 - sol_az)), lon + (Math.cos(toRad(90 - sol_az)))]]);
   
   //labeling and coloring of azimuthLine
-  if (sol_ang < 0) {
+  if (sol_ang < 0 && !isDrag) {
     azimuthLine.setStyle({color: '#2b197f'});
     azimuthLine.bindTooltip("<p>Night</p><p>Azmimuth: " + sol_az + "</p>").openTooltip();
-  } 
-  else {
+  }
+  if (sol_ang >= 0 && !isDrag) {
     azimuthLine.setStyle({color: '#ff5733'});
     azimuthLine.bindTooltip("<p>Day</p><p>Azmimuth: " + sol_az + "</p>").openTooltip();
   }
+}
+
+//update azimuthLine and legend based on timeSlider 
+timeSlider.noUiSlider.on('update', function(values, handle) {
+  solar_time = values[handle];
+
+  updateAzimuth(false);
 });
 
-
-
-
-
+//update azimuth with marker drag
+locMarker.on('drag', function(e) {
+  loc = locMarker.getLatLng();
+  console.log(loc);
+  lat = loc.lat;
+  lon = loc.lng;
+  
+  updateAzimuth(true);
+});
 
 
 
